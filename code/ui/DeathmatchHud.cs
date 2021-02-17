@@ -17,10 +17,8 @@ public partial class DeathmatchHud : Hud
 
 		//	RootPanel.AddChild<ChatUI>();
 
-		var healthPanel = RootPanel.Add.Panel( "health" ); 
-		var icon = healthPanel.Add.Label( "🩸", "icon" );
-		var health = healthPanel.Add.Label( "", "value" );
-		health.Text = "100";
+		RootPanel.AddChild<Vitals>();
+		RootPanel.AddChild<Ammo>();
 
 		//	health.BindToMethod( "text", () => Player.Local?.Health );
 

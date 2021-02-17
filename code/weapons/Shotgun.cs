@@ -25,6 +25,12 @@ partial class Shotgun : BaseDmWeapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
+		if ( !TakeAmmo( 1 ) )
+		{
+			DryFire();
+			return;
+		}
+
 		//
 		// Tell the clients to play the shoot effects
 		//
@@ -43,6 +49,12 @@ partial class Shotgun : BaseDmWeapon
 	{
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
+
+		if ( !TakeAmmo( 2 ) )
+		{
+			DryFire();
+			return;
+		}
 
 		//
 		// Tell the clients to play the shoot effects

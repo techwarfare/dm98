@@ -27,12 +27,17 @@ partial class DeathmatchPlayer : BasePlayer
 		EnableClientsideAnimation = true;
 
 		Dress();
+		ClearAmmo();
 
 		Inventory.Add( new Pistol(), true );
 		Inventory.Add( new Shotgun() );
 		Inventory.Add( new SMG() );
 		Inventory.Add( new Crossbow() );
 
+		GiveAmmo( AmmoType.Pistol, 50 );
+		GiveAmmo( AmmoType.Buckshot, 10 );
+		GiveAmmo( AmmoType.Crossbow, 4 );
+			 
 		base.Respawn();
 	}
 	public override void OnKilled()

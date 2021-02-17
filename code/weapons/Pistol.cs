@@ -19,6 +19,7 @@ partial class Pistol : BaseDmWeapon
 		base.Spawn();
 
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		AmmoClip = 10;
 	}
 
 	public override bool CanPrimaryAttack( Player owner )
@@ -30,6 +31,13 @@ partial class Pistol : BaseDmWeapon
 	{
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
+
+		if ( !TakeAmmo( 1 ) )
+		{
+			DryFire();
+			return;
+		}
+
 
 		//
 		// Tell the clients to play the shoot effects

@@ -8,14 +8,28 @@ using System.Numerics;
 using System.Threading.Tasks;
 
 partial class BaseDmWeapon : BaseWeapon
-{ 
+{
+
+	[NetPredicted]
+	public int AmmoClip { get; set; }
+
+	public virtual AmmoType AmmoType => AmmoType.Pistol;
+	public virtual int ClipSize => 16;
+
+
+	public int AvailableAmmo()
+	{
+		var owner = Owner as DeathmatchPlayer;
+		return owner.AmmoCount( AmmoType );
+	}
+
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+
 	}
 
 	public override void Reload( Player owner )
@@ -23,6 +37,14 @@ partial class BaseDmWeapon : BaseWeapon
 		base.Reload( owner );
 
 		ViewModelEntity?.SetAnimParam( "reload", true );
+
+		if ( IsServer )
+		{
+			var ammo = (Owner as DeathmatchPlayer).TakeAmmo( AmmoType, ClipSize - AmmoClip );
+			AmmoClip += ammo;
+		}
+
+		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 	}
 
 	public override void AttackPrimary( Player owner )
@@ -105,6 +127,21 @@ partial class BaseDmWeapon : BaseWeapon
 				tr.Entity.TakeDamage( damageInfo );
 			}
 		}
+	}
+
+	public bool TakeAmmo( int amount )
+	{
+		if ( AmmoClip < amount )
+			return false;
+
+		AmmoClip -= amount;
+		return true;
+	}
+
+	[Client]
+	public virtual void DryFire()
+	{
+		// CLICK
 	}
 
 }

@@ -26,6 +26,13 @@ partial class SMG : BaseDmWeapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
+		if ( !TakeAmmo( 1 ) )
+		{
+			DryFire();
+			return;
+		}
+
+
 		//
 		// Tell the clients to play the shoot effects
 		//
