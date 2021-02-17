@@ -13,12 +13,15 @@ partial class SMG : BaseDmWeapon
 
 	public override float PrimaryRate => 15.0f;
 	public override float SecondaryRate => 1.0f;
+	public override int ClipSize => 30;
+	public override float ReloadTime => 4.0f;
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		AmmoClip = 20;
 	}
 
 	public override void AttackPrimary( Player owner )

@@ -5,34 +5,37 @@ using System.Linq;
 partial class DeathmatchPlayer
 {
 	[Net]
-	public int[] Ammo;
+	public NetList<int> Ammo { get; set; } = new ();
 
 	public void ClearAmmo()
 	{
-		Ammo = new int[16];
+		Ammo.Clear();
 	}
 
 	public int AmmoCount( AmmoType type )
 	{
 		if ( Ammo == null ) return -5;
 
-		return Ammo[(int)type];
+		return Ammo.Get( type );
 	}
 
 	public void GiveAmmo( AmmoType type, int amount )
 	{
 		if ( Ammo == null ) return;
 
-		Ammo[(int)type] += amount;
+		Ammo.Set( type, amount );
 	}
 
 	public int TakeAmmo( AmmoType type, int amount )
 	{
 		//if ( Ammo == null ) return 0;
 
-		amount = Math.Min( Ammo[(int)type], amount );
+		var available = Ammo.Get( type );
+		amount = Math.Min( Ammo.Get( type ), amount );
 
-		Ammo[(int)type] -= amount;
+		Ammo.Set( type, available - amount );
+		NetworkDirty( "Ammo", NetVarGroup.Net );
+
 		return amount;
 	}
 }

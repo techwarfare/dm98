@@ -12,12 +12,17 @@ partial class Shotgun : BaseDmWeapon
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 	public override float PrimaryRate => 3;
 	public override float SecondaryRate => 1;
+	public override AmmoType AmmoType => AmmoType.Buckshot;
+	public override int ClipSize => 8;
+	public override float ReloadTime => 1.0f;
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+
+		AmmoClip = 6;
 	}
 
 	public override void AttackPrimary( Player owner )
@@ -67,6 +72,23 @@ partial class Shotgun : BaseDmWeapon
 		for ( int i = 0; i < 20; i++ )
 		{
 			ShootBullet( 0.5f, 0.3f, 5.0f, 3.0f );
+		}
+	}
+
+	public override void OnReloadFinish()
+	{
+		IsReloading = false;
+
+		if ( Owner is DeathmatchPlayer player )
+		{
+			var ammo = player.TakeAmmo( AmmoType, 1 );
+			if ( ammo == 0 )
+				return;
+
+			AmmoClip += ammo;
+
+			if ( AmmoClip != ClipSize )
+				Reload( Owner );
 		}
 	}
 }

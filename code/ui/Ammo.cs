@@ -27,7 +27,7 @@ public class Ammo : Panel
 		Weapon.Text = $"{weapon.AmmoClip}";
 
 		var inv = weapon.AvailableAmmo();
-		Inventory.Text = $"{inv}";
+		Inventory.Text = $" / {inv}";
 		Inventory.SetClass( "active", inv >= 0 );
 	}
 }

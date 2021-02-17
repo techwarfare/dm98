@@ -10,11 +10,18 @@ using System.Threading.Tasks;
 partial class BaseDmWeapon : BaseWeapon
 {
 
-	[NetPredicted]
+	[Net]
 	public int AmmoClip { get; set; }
 
 	public virtual AmmoType AmmoType => AmmoType.Pistol;
 	public virtual int ClipSize => 16;
+	public virtual float ReloadTime => 3.0f;
+
+	[Net]
+	public TimeSince TimeSinceReload { get; set; }
+
+	[Net]
+	public bool IsReloading { get; set; }
 
 
 	public int AvailableAmmo()
@@ -29,22 +36,65 @@ partial class BaseDmWeapon : BaseWeapon
 	{
 		base.Spawn();
 
-
+		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 	}
 
 	public override void Reload( Player owner )
 	{
-		base.Reload( owner );
+		if ( IsClient || IsReloading )
+			return;
 
-		ViewModelEntity?.SetAnimParam( "reload", true );
+		TimeSinceReload = 0;
 
-		if ( IsServer )
+		using ( Prediction.Off() )
 		{
-			var ammo = (Owner as DeathmatchPlayer).TakeAmmo( AmmoType, ClipSize - AmmoClip );
-			AmmoClip += ammo;
+			if ( Owner  is DeathmatchPlayer player )
+			{
+				if ( player.AmmoCount( AmmoType ) <= 0 )
+					return;
+
+				StartReloadEffects();
+			}
+
+			IsReloading = true;
+			StartReloadEffects();
+		}
+	}
+
+	public override void OnPlayerControlTick( Player owner )
+	{
+		if ( !IsReloading )
+		{
+			base.OnPlayerControlTick( owner );
 		}
 
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		if ( IsServer && IsReloading && TimeSinceReload > ReloadTime )
+		{
+			OnReloadFinish();
+		}
+	}
+
+	public virtual void OnReloadFinish()
+	{
+		IsReloading = false;
+
+		if ( Owner is DeathmatchPlayer player )
+		{
+			var ammo = player.TakeAmmo( AmmoType, ClipSize - AmmoClip );
+			if ( ammo == 0 )
+				return;
+
+			AmmoClip += ammo;
+		}
+	}
+
+	[Client]
+	public virtual void StartReloadEffects()
+	{
+		Log.Info( $"START RELOAD {ViewModelEntity}" );
+		ViewModelEntity?.SetAnimParam( "reload", true );
+
+		// TODO - player third person model reload
 	}
 
 	public override void AttackPrimary( Player owner )
