@@ -20,7 +20,7 @@ partial class Shotgun : BaseDmWeapon
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		SetModel( "weapons/rust_shotgun/rust_shotgun.vmdl" ); 
 
 		AmmoClip = 6;
 	}
@@ -90,5 +90,11 @@ partial class Shotgun : BaseDmWeapon
 			if ( AmmoClip != ClipSize )
 				Reload( Owner );
 		}
+	}
+
+	public override void TickPlayerAnimator( PlayerAnimator anim )
+	{
+		anim.SetParam( "holdtype", 2 ); // TODO this is shit
+		anim.SetParam( "aimat_weight", 1.0f );
 	}
 }
