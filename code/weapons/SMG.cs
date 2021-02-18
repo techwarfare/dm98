@@ -35,6 +35,10 @@ partial class SMG : BaseDmWeapon
 		//	return;
 		}
 
+		Owner.SetAnimParam( "b_attack", true );
+		//Owner.SetAnimParam( "b_jump", true );
+
+		//Owner.SetAnimParam( "b_attack" );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -60,7 +64,15 @@ partial class SMG : BaseDmWeapon
 
 		PlaySound( "rust_smg.shoot" );
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
-		ViewModelEntity?.SetAnimParam( "fire", true );
+		Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
+
+		ViewModelEntity?.SetAnimParam( "fire", true ); 
+	}
+
+	public override void TickPlayerAnimator( PlayerAnimator anim )
+	{
+		anim.SetParam( "holdtype", 2 ); // TODO this is shit
+		anim.SetParam( "aimat_weight", 1.0f );
 	}
 
 }

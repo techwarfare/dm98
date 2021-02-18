@@ -57,6 +57,7 @@ partial class BaseDmWeapon : BaseWeapon
 			}
 
 			IsReloading = true;
+			Owner.SetAnimParam( "b_reload", true ); 
 			StartReloadEffects();
 		}
 	}
