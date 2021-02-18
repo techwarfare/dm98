@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 partial class SMG : BaseDmWeapon
 { 
-	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
+	public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
 
 	public override float PrimaryRate => 15.0f;
 	public override float SecondaryRate => 1.0f;
@@ -20,7 +20,7 @@ partial class SMG : BaseDmWeapon
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		SetModel( "weapons/rust_smg/rust_smg.vmdl" );
 		AmmoClip = 20;
 	}
 
@@ -29,10 +29,10 @@ partial class SMG : BaseDmWeapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		if ( !TakeAmmo( 1 ) )
+	//	if ( !TakeAmmo( 1 ) )
 		{
-			DryFire();
-			return;
+		//	DryFire();
+		//	return;
 		}
 
 
@@ -53,5 +53,14 @@ partial class SMG : BaseDmWeapon
 		// Grenade lob
 	}
 
+	[Client]
+	protected override void ShootEffects()
+	{
+		Host.AssertClient();
+
+		PlaySound( "rust_smg.shoot" );
+		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+		ViewModelEntity?.SetAnimParam( "fire", true );
+	}
 
 }
