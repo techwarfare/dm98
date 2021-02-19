@@ -29,16 +29,13 @@ partial class SMG : BaseDmWeapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-	//	if ( !TakeAmmo( 1 ) )
+		if ( !TakeAmmo( 1 ) )
 		{
-		//	DryFire();
-		//	return;
+			DryFire();
+			return;
 		}
 
 		Owner.SetAnimParam( "b_attack", true );
-		//Owner.SetAnimParam( "b_jump", true );
-
-		//Owner.SetAnimParam( "b_attack" );
 
 		//
 		// Tell the clients to play the shoot effects
