@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 partial class Shotgun : BaseDmWeapon
 { 
-	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
-	public override float PrimaryRate => 3;
+	public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
+	public override float PrimaryRate => 1;
 	public override float SecondaryRate => 1;
 	public override AmmoType AmmoType => AmmoType.Buckshot;
 	public override int ClipSize => 8;
-	public override float ReloadTime => 1.0f;
+	public override float ReloadTime => 0.8f;
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_shotgun/rust_shotgun.vmdl" ); 
+		SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" ); 
 
 		AmmoClip = 6;
 	}
@@ -35,6 +35,8 @@ partial class Shotgun : BaseDmWeapon
 			DryFire();
 			return;
 		}
+
+		Owner.SetAnimParam( "b_attack", true );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -52,8 +54,8 @@ partial class Shotgun : BaseDmWeapon
 
 	public override void AttackSecondary( Player owner )
 	{
-		TimeSincePrimaryAttack = 0;
-		TimeSinceSecondaryAttack = 0;
+		TimeSincePrimaryAttack = -0.5f;
+		TimeSinceSecondaryAttack = -0.5f;
 
 		if ( !TakeAmmo( 2 ) )
 		{
@@ -61,10 +63,12 @@ partial class Shotgun : BaseDmWeapon
 			return;
 		}
 
+		Owner.SetAnimParam( "b_attack", true );
+
 		//
 		// Tell the clients to play the shoot effects
 		//
-		ShootEffects();
+		DoubleShootEffects();
 
 		//
 		// Shoot the bullets
@@ -75,9 +79,38 @@ partial class Shotgun : BaseDmWeapon
 		}
 	}
 
+	[Client]
+	protected override void ShootEffects()
+	{
+		Host.AssertClient();
+
+		PlaySound( "rust_pumpshotgun.shoot" );
+		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+		Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
+
+		ViewModelEntity?.SetAnimParam( "fire", true );
+	}
+
+	[Client]
+	protected virtual void DoubleShootEffects()
+	{
+		Host.AssertClient();
+
+		PlaySound( "rust_pumpshotgun.shootdouble" );
+		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+
+		ViewModelEntity?.SetAnimParam( "fire_double", true );
+	}
+
 	public override void OnReloadFinish()
 	{
 		IsReloading = false;
+
+		TimeSincePrimaryAttack = 0;
+		TimeSinceSecondaryAttack = 0;
+
+		if ( AmmoClip >= ClipSize )
+			return;
 
 		if ( Owner is DeathmatchPlayer player )
 		{
@@ -87,9 +120,22 @@ partial class Shotgun : BaseDmWeapon
 
 			AmmoClip += ammo;
 
-			if ( AmmoClip != ClipSize )
+			if ( AmmoClip < ClipSize )
+			{
 				Reload( Owner );
+			}
+			else
+			{
+				FinishReload();
+			}
 		}
+	}
+
+	[Client]
+	protected virtual void FinishReload()
+	{
+		Log.Info( "reload_finished" );
+		ViewModelEntity?.SetAnimParam( "reload_finished", true );
 	}
 
 	public override void TickPlayerAnimator( PlayerAnimator anim )
