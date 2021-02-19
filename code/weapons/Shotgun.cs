@@ -14,7 +14,7 @@ partial class Shotgun : BaseDmWeapon
 	public override float SecondaryRate => 1;
 	public override AmmoType AmmoType => AmmoType.Buckshot;
 	public override int ClipSize => 8;
-	public override float ReloadTime => 0.8f;
+	public override float ReloadTime => 0.5f;
 
 	public override void Spawn()
 	{
@@ -134,7 +134,6 @@ partial class Shotgun : BaseDmWeapon
 	[Client]
 	protected virtual void FinishReload()
 	{
-		Log.Info( "reload_finished" );
 		ViewModelEntity?.SetAnimParam( "reload_finished", true );
 	}
 
