@@ -35,7 +35,7 @@ partial class DeathmatchPlayer : BasePlayer
 		Inventory.Add( new Crossbow() );
 
 		GiveAmmo( AmmoType.Pistol, 50 );
-		GiveAmmo( AmmoType.Buckshot, 10 );
+		GiveAmmo( AmmoType.Buckshot, 1000 );
 		GiveAmmo( AmmoType.Crossbow, 4 );
 			 
 		base.Respawn();
