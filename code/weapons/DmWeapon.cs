@@ -71,7 +71,10 @@ partial class BaseDmWeapon : BaseWeapon
 
 		if ( IsServer && IsReloading && TimeSinceReload > ReloadTime )
 		{
-			OnReloadFinish();
+			using ( Prediction.Off() )
+			{
+				OnReloadFinish();
+			}
 		}
 	}
 
@@ -92,7 +95,6 @@ partial class BaseDmWeapon : BaseWeapon
 	[Client]
 	public virtual void StartReloadEffects()
 	{
-		Log.Info( $"START RELOAD {ViewModelEntity}" );
 		ViewModelEntity?.SetAnimParam( "reload", true );
 
 		// TODO - player third person model reload
