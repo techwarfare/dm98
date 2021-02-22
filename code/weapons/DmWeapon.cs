@@ -44,6 +44,9 @@ partial class BaseDmWeapon : BaseWeapon
 		if ( IsClient || IsReloading )
 			return;
 
+		if ( AmmoClip >= ClipSize )
+			return;
+
 		TimeSinceReload = 0;
 
 		using ( Prediction.Off() )
