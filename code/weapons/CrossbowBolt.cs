@@ -76,7 +76,7 @@ partial class CrossbowBolt : ModelEntity, IPhysicsUpdate
 			}
 
 			// TODO: Parent to bone so this will stick in the meaty heads
-			Parent = tr.Entity;
+			SetParent( tr.Entity, tr.Bone );
 			Owner = null;
 
 			//
