@@ -14,16 +14,19 @@ partial class DeathmatchPlayer
 
 	public int AmmoCount( AmmoType type )
 	{
-		if ( Ammo == null ) return -5;
+		
+		if ( Ammo == null ) return 0;
 
 		return Ammo.Get( type );
 	}
 
-	public void GiveAmmo( AmmoType type, int amount )
+	public bool GiveAmmo( AmmoType type, int amount )
 	{
-		if ( Ammo == null ) return;
+		if ( !Host.IsServer ) return false;
+		if ( Ammo == null ) return false;
 
-		Ammo.Set( type, amount );
+		var currentAmmo = AmmoCount( type );
+		return Ammo.Set( type, currentAmmo + amount );
 	}
 
 	public int TakeAmmo( AmmoType type, int amount )
