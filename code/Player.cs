@@ -8,7 +8,7 @@ partial class DeathmatchPlayer : BasePlayer
 
 	public DeathmatchPlayer()
 	{
-		Inventory = new BaseInventory( this );
+		Inventory = new DmInventory( this );
 		EnableClientsideAnimation = true;
 	}
 
@@ -74,6 +74,9 @@ partial class DeathmatchPlayer : BasePlayer
 		if ( Input.Pressed( InputButton.Slot4 ) ) Inventory.SetActiveSlot( 3, true );
 		if ( Input.Pressed( InputButton.Slot5 ) ) Inventory.SetActiveSlot( 4, true );
 		if ( Input.Pressed( InputButton.Slot6 ) ) Inventory.SetActiveSlot( 5, true );
+		if ( Input.Pressed( InputButton.Slot7 ) ) Inventory.SetActiveSlot( 6, true );
+		if ( Input.Pressed( InputButton.Slot8 ) ) Inventory.SetActiveSlot( 7, true );
+		if ( Input.Pressed( InputButton.Slot9 ) ) Inventory.SetActiveSlot( 8, true );
 
 		if ( Input.MouseWheel != 0 ) Inventory.SwitchActiveSlot( Input.MouseWheel, true );
 
@@ -99,6 +102,12 @@ partial class DeathmatchPlayer : BasePlayer
 			{
 				timeSinceDropped = 0;
 			}
+		}
+
+		if ( Input.Pressed( InputButton.Use ) )
+		{
+			GiveAmmo( AmmoType.Pistol, 1 );
+			NetworkDirty( "Cocks", NetVarGroup.Net );
 		}
 	}
 
