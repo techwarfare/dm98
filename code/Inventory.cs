@@ -30,6 +30,8 @@ partial class DmInventory : BaseInventory
 				Sound.FromWorld( "dm.pickup_ammo", ent.WorldPos );
 			}
 
+			ItemRespawn.Taken( ent ); 
+
 			// Despawn it
 			ent.Delete();
 			return false;
@@ -40,6 +42,7 @@ partial class DmInventory : BaseInventory
 			Sound.FromWorld( "dm.pickup_weapon", ent.WorldPos );
 		}
 
+		ItemRespawn.Taken( ent );
 		return base.Add( ent, makeActive );
 	}
 

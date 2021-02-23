@@ -24,8 +24,12 @@ partial class DeathmatchGame : Game
 	/// Called when a player joins and wants a player entity. We create
 	/// our own class so we can control what happens.
 	/// </summary>
-	public override Player CreatePlayer()
+	public override Player CreatePlayer() => new DeathmatchPlayer();
+
+	public override void PostLevelLoaded()
 	{
-		return new DeathmatchPlayer();
+		base.PostLevelLoaded();
+
+		ItemRespawn.Init();
 	}
 }

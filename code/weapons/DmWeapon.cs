@@ -7,7 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 
-partial class BaseDmWeapon : BaseWeapon
+partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 {
 
 	[Net]
