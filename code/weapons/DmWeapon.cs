@@ -147,6 +147,11 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 		PlaySound( "rust_pistol.shoot" );
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 
+		if (Owner == Player.Local)
+		{
+			new Sandbox.ScreenShake.Perlin();
+		}
+
 		ViewModelEntity?.SetAnimParam( "fire", true );
 	}
 

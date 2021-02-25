@@ -84,6 +84,11 @@ partial class Shotgun : BaseDmWeapon
 		Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
 
 		ViewModelEntity?.SetAnimParam( "fire", true );
+
+		if (Owner == Player.Local)
+		{
+			new Sandbox.ScreenShake.Perlin(2.0f, 1.0f, 2.0f);
+		}
 	}
 
 	[Client]
@@ -95,6 +100,11 @@ partial class Shotgun : BaseDmWeapon
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 
 		ViewModelEntity?.SetAnimParam( "fire_double", true );
+
+		if (Owner == Player.Local)
+		{
+			new Sandbox.ScreenShake.Perlin(3.0f, 3.0f, 3.0f);
+		}
 	}
 
 	public override void OnReloadFinish()

@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-
+using System;
 
 [ClassLibrary( "dm_smg" )]
 partial class SMG : BaseDmWeapon
@@ -57,6 +57,11 @@ partial class SMG : BaseDmWeapon
 		PlaySound( "rust_smg.shoot" );
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 		Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
+
+		if ( Owner == Player.Local )
+		{
+			new Sandbox.ScreenShake.Perlin(0.5f, 4.0f, 1.0f, 0.5f);
+		}
 
 		ViewModelEntity?.SetAnimParam( "fire", true ); 
 	}
