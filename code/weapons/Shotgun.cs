@@ -87,7 +87,7 @@ partial class Shotgun : BaseDmWeapon
 
 		if (Owner == Player.Local)
 		{
-			new Sandbox.ScreenShake.Perlin(2.0f, 1.0f, 2.0f);
+			new Sandbox.ScreenShake.Perlin(1.0f, 1.5f, 2.0f);
 		}
 	}
 

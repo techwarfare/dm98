@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 
 partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 {
-
-	[Net]
-	public int AmmoClip { get; set; }
-
 	public virtual AmmoType AmmoType => AmmoType.Pistol;
 	public virtual int ClipSize => 16;
 	public virtual float ReloadTime => 3.0f;
 
-	[Net]
+	[NetPredicted]
+	public int AmmoClip { get; set; }
+
+	[NetPredicted]
 	public TimeSince TimeSinceReload { get; set; }
 
-	[Net]
+	[NetPredicted]
 	public bool IsReloading { get; set; }
 
 
 	public int AvailableAmmo()
 	{
 		var owner = Owner as DeathmatchPlayer;
+		if ( owner == null ) return 0;
 		return owner.AmmoCount( AmmoType );
 	}
 
@@ -41,7 +41,7 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 
 	public override void Reload( Player owner )
 	{
-		if ( IsClient || IsReloading )
+		if ( IsReloading )
 			return;
 
 		if ( AmmoClip >= ClipSize )
@@ -49,20 +49,17 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 
 		TimeSinceReload = 0;
 
-		using ( Prediction.Off() )
+		if ( Owner  is DeathmatchPlayer player )
 		{
-			if ( Owner  is DeathmatchPlayer player )
-			{
-				if ( player.AmmoCount( AmmoType ) <= 0 )
-					return;
+			if ( player.AmmoCount( AmmoType ) <= 0 )
+				return;
 
-				StartReloadEffects();
-			}
-
-			IsReloading = true;
-			Owner.SetAnimParam( "b_reload", true ); 
 			StartReloadEffects();
 		}
+
+		IsReloading = true;
+		Owner.SetAnimParam( "b_reload", true ); 
+		StartReloadEffects();
 	}
 
 	public override void OnPlayerControlTick( Player owner )
@@ -72,12 +69,9 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 			base.OnPlayerControlTick( owner );
 		}
 
-		if ( IsServer && IsReloading && TimeSinceReload > ReloadTime )
+		if ( IsReloading && TimeSinceReload > ReloadTime )
 		{
-			using ( Prediction.Off() )
-			{
-				OnReloadFinish();
-			}
+			OnReloadFinish();
 		}
 	}
 
