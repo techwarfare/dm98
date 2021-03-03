@@ -25,6 +25,7 @@ public partial class DeathmatchHud : Hud
 		RootPanel.AddChild<NameTags>();
 		RootPanel.AddChild<CrosshairCanvas>();
 		RootPanel.AddChild<InventoryBar>();
+		RootPanel.AddChild<PickupFeed>();
 
 		RootPanel.AddChild<ChatBox>();
 		RootPanel.AddChild<KillFeed>();

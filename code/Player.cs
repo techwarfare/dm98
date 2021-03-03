@@ -7,6 +7,8 @@ partial class DeathmatchPlayer : BasePlayer
 {
 	TimeSince timeSinceDropped;
 
+	public bool SupressPickupNotices { get; private set; }
+
 	public DeathmatchPlayer()
 	{
 		Inventory = new DmInventory( this );
@@ -30,6 +32,8 @@ partial class DeathmatchPlayer : BasePlayer
 		Dress();
 		ClearAmmo();
 
+		SupressPickupNotices = true;
+
 		Inventory.Add( new Pistol(), true );
 		Inventory.Add( new Shotgun() );
 		Inventory.Add( new SMG() );
@@ -38,7 +42,10 @@ partial class DeathmatchPlayer : BasePlayer
 		GiveAmmo( AmmoType.Pistol, 50 );
 		GiveAmmo( AmmoType.Buckshot, 1000 );
 		GiveAmmo( AmmoType.Crossbow, 4 );
-			 
+
+		SupressPickupNotices = false;
+
+
 		base.Respawn();
 	}
 	public override void OnKilled()
