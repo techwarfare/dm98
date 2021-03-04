@@ -15,12 +15,12 @@ partial class Shotgun : BaseDmWeapon
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" ); 
+		SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );  
 
 		AmmoClip = 6;
 	}
 
-	public override void AttackPrimary( Player owner )
+	public override void AttackPrimary( Player owner ) 
 	{
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
@@ -74,7 +74,7 @@ partial class Shotgun : BaseDmWeapon
 		}
 	}
 
-	[Client]
+	[ClientRpc]
 	protected override void ShootEffects()
 	{
 		Host.AssertClient();
@@ -91,7 +91,7 @@ partial class Shotgun : BaseDmWeapon
 		}
 	}
 
-	[Client]
+	[ClientRpc]
 	protected virtual void DoubleShootEffects()
 	{
 		Host.AssertClient();
@@ -136,7 +136,7 @@ partial class Shotgun : BaseDmWeapon
 		}
 	}
 
-	[Client]
+	[ClientRpc]
 	protected virtual void FinishReload()
 	{
 		ViewModelEntity?.SetAnimParam( "reload_finished", true );

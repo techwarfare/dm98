@@ -18,7 +18,7 @@ public partial class PickupFeed : Panel
 	/// <summary>
 	/// An RPC which can be called from the server 
 	/// </summary>
-	[Client]
+	[ClientRpc]
 	public static void OnPickup( string text )
 	{
 		// TODO - icons for weapons?
