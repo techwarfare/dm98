@@ -208,7 +208,6 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 
 		ViewModelEntity = new DmViewModel();
 		ViewModelEntity.WorldPos = WorldPos;
-		ViewModelEntity.Parent = this;
 		ViewModelEntity.Owner = Owner;
 		ViewModelEntity.EnableViewmodelRendering = true;
 		ViewModelEntity.SetModel( ViewModelPath );
