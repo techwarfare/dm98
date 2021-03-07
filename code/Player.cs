@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 
 partial class DeathmatchPlayer : BasePlayer
 {
@@ -127,10 +128,31 @@ partial class DeathmatchPlayer : BasePlayer
 	}
 
 
+	Rotation lastCameraRot = Rotation.Identity;
 
 	public override void PostCameraSetup( Camera camera )
 	{
 		base.PostCameraSetup( camera );
+
+		if ( lastCameraRot == Rotation.Identity )
+			lastCameraRot = Camera.Rot;
+
+		var angleDiff = Rotation.Difference( lastCameraRot, Camera.Rot );
+		var angleDiffDegrees = angleDiff.Angle();
+		var allowance = 2.0f;
+
+		if ( angleDiffDegrees > allowance )
+		{
+			// We could have a function that clamps a rotation to within x degrees of another rotation?
+			lastCameraRot = Rotation.Lerp( lastCameraRot, Camera.Rot, 1.0f - (allowance / angleDiffDegrees) );
+		}
+		else
+		{
+			//lastCameraRot = Rotation.Lerp( lastCameraRot, Camera.Rot, Time.Delta * 0.2f * angleDiffDegrees );
+		}
+
+		//lastCameraRot = Rotation.Lerp( lastCameraRot, Camera.Rot, Time.Delta );
+		camera.Rot = lastCameraRot;
 
 		if ( camera is FirstPersonCamera )
 		{
