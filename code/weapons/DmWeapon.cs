@@ -147,6 +147,7 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 		}
 
 		ViewModelEntity?.SetAnimParam( "fire", true );
+		CrosshairPanel?.OnEvent( "fire" );
 	}
 
 	/// <summary>
@@ -211,6 +212,15 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 		ViewModelEntity.Owner = Owner;
 		ViewModelEntity.EnableViewmodelRendering = true;
 		ViewModelEntity.SetModel( ViewModelPath );
+	}
+
+	public override void CreateHudElements()
+	{
+		if ( Hud.CurrentPanel == null ) return;
+
+		CrosshairPanel = new Crosshair();
+		CrosshairPanel.Parent = Hud.CurrentPanel;
+		CrosshairPanel.AddClass( ClassInfo.Name );
 	}
 
 }
