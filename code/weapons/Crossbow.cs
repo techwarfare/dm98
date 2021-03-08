@@ -6,6 +6,7 @@ partial class Crossbow : BaseDmWeapon, IPlayerCamera, IPlayerInput
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	public override float PrimaryRate => 1;
+	public override int Bucket => 3;
 	public override AmmoType AmmoType => AmmoType.Crossbow;
 
 	[Net]

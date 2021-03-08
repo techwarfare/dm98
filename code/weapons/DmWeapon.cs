@@ -12,6 +12,8 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 	public virtual AmmoType AmmoType => AmmoType.Pistol;
 	public virtual int ClipSize => 16;
 	public virtual float ReloadTime => 3.0f;
+	public virtual int Bucket => 1;
+	public virtual int BucketWeight => 100;
 
 	[NetPredicted]
 	public int AmmoClip { get; set; }
