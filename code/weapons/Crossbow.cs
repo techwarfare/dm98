@@ -16,6 +16,7 @@ partial class Crossbow : BaseDmWeapon, IPlayerCamera, IPlayerInput
 	{
 		base.Spawn();
 
+		AmmoClip = 3;
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 	}
 

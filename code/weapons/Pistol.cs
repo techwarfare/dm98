@@ -17,7 +17,7 @@ partial class Pistol : BaseDmWeapon
 		base.Spawn();
 
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
-		AmmoClip = 10;
+		AmmoClip = 12;
 	}
 
 	public override bool CanPrimaryAttack( Player owner )
