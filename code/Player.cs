@@ -135,7 +135,7 @@ partial class DeathmatchPlayer : BasePlayer
 
 		var angleDiff = Rotation.Difference( lastCameraRot, Camera.Rot );
 		var angleDiffDegrees = angleDiff.Angle();
-		var allowance = 2.0f;
+		var allowance = 20.0f;
 
 		if ( angleDiffDegrees > allowance )
 		{
@@ -147,8 +147,8 @@ partial class DeathmatchPlayer : BasePlayer
 			//lastCameraRot = Rotation.Lerp( lastCameraRot, Camera.Rot, Time.Delta * 0.2f * angleDiffDegrees );
 		}
 
-		//lastCameraRot = Rotation.Lerp( lastCameraRot, Camera.Rot, Time.Delta );
-		camera.Rot = lastCameraRot;
+		// uncomment for lazy cam
+		//camera.Rot = lastCameraRot;
 
 		if ( camera is FirstPersonCamera )
 		{
@@ -220,5 +220,7 @@ partial class DeathmatchPlayer : BasePlayer
 	{
 		Sound.FromScreen( "dm.ui_attacker" )
 			.SetPitch( 1 + healthinv * 1 );
+
+		HitIndicator.Current?.OnHit( pos, amount );
 	}
 }
