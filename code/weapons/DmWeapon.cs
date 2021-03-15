@@ -153,7 +153,6 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 	{
 		Host.AssertClient();
 
-		PlaySound( "rust_pistol.shoot" );
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 
 		if (Owner == Player.Local)
