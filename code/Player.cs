@@ -34,12 +34,12 @@ partial class DeathmatchPlayer : BasePlayer
 		SupressPickupNotices = true;
 
 		Inventory.Add( new Pistol(), true );
-		Inventory.Add( new Shotgun() );
-		Inventory.Add( new SMG() );
-		Inventory.Add( new Crossbow() );
+		//Inventory.Add( new Shotgun() );
+		//Inventory.Add( new SMG() );
+		//Inventory.Add( new Crossbow() );
 
-		GiveAmmo( AmmoType.Pistol, 50 );
-		GiveAmmo( AmmoType.Buckshot, 1000 );
+		GiveAmmo( AmmoType.Pistol, 100 );
+		GiveAmmo( AmmoType.Buckshot, 8 );
 		GiveAmmo( AmmoType.Crossbow, 4 );
 
 		SupressPickupNotices = false;
@@ -105,16 +105,30 @@ partial class DeathmatchPlayer : BasePlayer
 			{
 				dropped.PhysicsGroup.Velocity = Velocity + (EyeRot.Forward + EyeRot.Up ) * 300;
 				timeSinceDropped = 0;
+				SwitchToBestWeapon();
 			}
 		}
 
-		if ( Input.Pressed( InputButton.Use ) )
+		//
+		// If the current weapon is out of ammo and we last fired it over half a second ago
+		// lets try to switch to a better wepaon
+		//
+		if ( ActiveChild is BaseDmWeapon weapon && !weapon.IsUsable() && weapon.TimeSincePrimaryAttack > 0.5f && weapon.TimeSinceSecondaryAttack > 0.5f )
 		{
-			using ( Prediction.Off() )
-			{
-				TookDamage( this, WorldPos + Vector3.Random * 100 );
-			}
+			SwitchToBestWeapon();
 		}
+	}
+
+	public void SwitchToBestWeapon()
+	{
+		var best = Children.Select( x => x as BaseDmWeapon )
+			.Where( x => x.IsValid() && x.IsUsable() )
+			.OrderByDescending( x => x.BucketWeight )
+			.FirstOrDefault();
+
+		if ( best == null ) return;
+
+		ActiveChild = best;
 	}
 
 
@@ -126,6 +140,7 @@ partial class DeathmatchPlayer : BasePlayer
 		Inventory.Add( other, Inventory.Active == null );
 	}
 
+	RealTimeSince timeSinceUpdatedFramerate;
 
 	Rotation lastCameraRot = Rotation.Identity;
 
@@ -156,6 +171,12 @@ partial class DeathmatchPlayer : BasePlayer
 		if ( camera is FirstPersonCamera )
 		{
 			AddCameraEffects( camera );
+		}
+
+		if ( timeSinceUpdatedFramerate > 1 )
+		{
+			timeSinceUpdatedFramerate = 0;
+			UpdateFps( (int) (1.0f / Time.Delta) );
 		}
 	}
 
@@ -198,6 +219,13 @@ partial class DeathmatchPlayer : BasePlayer
 	//	Hud.CurrentPanel.Style.Transform = tx;
 	//	Hud.CurrentPanel.Style.Dirty();
 
+	}
+
+	[OwnerRpc]
+	protected void UpdateFps( int fps )
+	{
+		Log.Info( $"{Host.Name} OwnerRPC - UpdateFPS" );
+		SetScore( "fps", fps );
 	}
 
 	public override void TakeDamage( DamageInfo info )

@@ -24,12 +24,22 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 	[NetPredicted]
 	public bool IsReloading { get; set; }
 
+	[NetPredicted]
+	public TimeSince TimeSinceDeployed { get; set; }
+
 
 	public int AvailableAmmo()
 	{
 		var owner = Owner as DeathmatchPlayer;
 		if ( owner == null ) return 0;
 		return owner.AmmoCount( AmmoType );
+	}
+
+	public override void ActiveStart( Entity ent )
+	{
+		base.ActiveStart( ent );
+
+		TimeSinceDeployed = 0;
 	}
 
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
@@ -64,8 +74,11 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 		StartReloadEffects();
 	}
 
-	public override void OnPlayerControlTick( Player owner )
+	public override void OnPlayerControlTick( Player owner ) 
 	{
+		if ( TimeSinceDeployed < 0.6f )
+			return;
+
 		if ( !IsReloading )
 		{
 			base.OnPlayerControlTick( owner );
@@ -223,6 +236,12 @@ partial class BaseDmWeapon : BaseWeapon, IRespawnableEntity
 		CrosshairPanel = new Crosshair();
 		CrosshairPanel.Parent = Hud.CurrentPanel;
 		CrosshairPanel.AddClass( ClassInfo.Name );
+	}
+
+	public bool IsUsable()
+	{
+		if ( AmmoClip > 0 ) return true;
+		return AvailableAmmo() > 0;
 	}
 
 }
