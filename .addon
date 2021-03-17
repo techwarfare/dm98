@@ -1,6 +1,7 @@
 {
 		"name": "Deathmatch 98",
 		"version": "1.0",
+		"sharedassets": "*.*",
 
 		"depends": 
 		[
