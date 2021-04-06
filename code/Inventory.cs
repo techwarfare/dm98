@@ -55,8 +55,8 @@ partial class RoleplayInventory : BaseInventory
 
 			ItemRespawn.Taken(ent);
 
-			//Delete the ent but don't stop it from checking if we should carry it
 			ent.Delete();
+			return false;
 		}
 
 		if ( ent != null && notices )
