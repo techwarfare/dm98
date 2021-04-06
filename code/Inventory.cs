@@ -14,14 +14,14 @@ partial class RoleplayInventory : BaseInventory
 	public override bool Add( Entity ent, bool makeActive = false )
 	{
 		var player = Owner as RoleplayPlayer;
-		var weapon = ent as BaseDmWeapon;
 		var notices = !player.SupressPickupNotices;
 		//
 		// We don't want to pick up the same weapon twice
 		// But we'll take the ammo from it Winky Face
 		//
-		if ( weapon != null && IsCarryingType( ent.GetType() ) )
+		if ( ent != null && IsCarryingType( ent.GetType() ) )
 		{
+			var weapon = ent as BaseDmWeapon;
 			var ammo = weapon.AmmoClip;
 			var ammoType = weapon.AmmoType;
 
@@ -43,7 +43,23 @@ partial class RoleplayInventory : BaseInventory
 			return false;
 		}
 
-		if ( weapon != null && notices )
+		if (ent != null && IsCarryingType(ent.GetType()))
+		{
+			var item = ent as RPItem;
+			var itemAmount = item.Amount;
+
+			if (itemAmount > 0)
+			{
+				player.GiveItem(item, itemAmount);
+			}
+
+			ItemRespawn.Taken(ent);
+
+			//Delete the ent but don't stop it from checking if we should carry it
+			ent.Delete();
+		}
+
+		if ( ent != null && notices )
 		{
 			Sound.FromWorld( "dm.pickup_weapon", ent.WorldPos );
 			PickupFeed.OnPickup( player, $"{ent.ClassInfo.Title}" ); 

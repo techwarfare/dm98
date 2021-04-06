@@ -1,14 +1,15 @@
 using Sandbox;
-partial class HealthPack : RPItem
+partial class HealthPack : RPItem, IPlayerInput
 {
     [NetPredicted]
     public virtual int HealAmount => 25;
+    public override int Amount => 1;
     public PickupTrigger PickupTrigger {get; protected set;}
     public virtual RoleplayPlayer Owner {get; protected set;}
     public override void OnPlayerControlTick(Player entOwner)
     {
         base.OnPlayerControlTick(entOwner);
-        
+
         if (entOwner.Input.Down(InputButton.Attack1))
         {
             HealPlayer(entOwner);

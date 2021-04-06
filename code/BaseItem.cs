@@ -2,7 +2,7 @@ using Sandbox;
 
 partial class BaseItem : BaseCarriable, IPlayerControllable
 {
-    public int ItemAmount => 0;
+    public int Amount => 0;
     public override void Spawn()
     {
         base.Spawn();
