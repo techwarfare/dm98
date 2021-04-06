@@ -4,6 +4,7 @@ partial class BaseMeleeWeapon : BaseCarriable, IPlayerControllable
 {
     public virtual float PrimaryRate => 5.0f;
     public virtual float SecondaryRate => 15.0f;
+    public virtual bool TraceBlade => true;
     public override void Spawn()
     {
         base.Spawn();
@@ -41,7 +42,7 @@ partial class BaseMeleeWeapon : BaseCarriable, IPlayerControllable
     }
     public virtual bool CanPrimaryAttack(Player owner)
     {
-        if ( !ownner.Input.Down(InputButton.Attack1)) return false;
+        if ( !owner.Input.Down(InputButton.Attack1)) return false;
 
         var rate = PrimaryRate;
         if (rate <= 0) return true;
