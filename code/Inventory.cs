@@ -2,11 +2,11 @@
 using System;
 using System.Linq;
 
-partial class DmInventory : BaseInventory
+partial class RoleplayInventory : BaseInventory
 {
 
 
-	public DmInventory( Player player ) : base ( player )
+	public RoleplayInventory( Player player ) : base ( player )
 	{
 
 	}
