@@ -1,7 +1,8 @@
 using Sandbox;
 
-partial class RPItem : BaseItem, IRespawnableEntity
+partial class BaseItem : BaseCarriable, IPlayerControllable
 {
+    public int ItemAmount => 0;
     public override void Spawn()
     {
         base.Spawn();
@@ -10,8 +11,8 @@ partial class RPItem : BaseItem, IRespawnableEntity
         SetInteractsAs(CollisionLayer.Debris);
     }
 
-    public override void OnPlayerControlTick(Player owner)
+    public virtual void OnPlayerControlTick(Player owner)
     {
-        base.OnPlayerControlTick(owner);
+        
     }
 }
