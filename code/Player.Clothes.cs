@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-partial class DeathmatchPlayer
+partial class RoleplayPlayer
 {
 	ModelEntity pants;
 	ModelEntity jacket;
